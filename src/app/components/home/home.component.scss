@@ -1,0 +1,198 @@
+.container {
+    height: 100%;
+    padding: 60px;
+    display: grid;
+    grid-template-areas: "title" "controls" "status" "console";
+    grid-template-rows: max-content 60px 1fr;
+
+    .title {
+        grid-area: title;
+        color: black;
+        margin: 0 0 1em 0;
+    }
+
+    .controls {
+        grid-area: controls;
+        grid-template-rows: 1fr;
+        height: 50px;
+        display: flex;
+
+        .btn {
+            cursor: pointer;
+            // display: inline-block;
+            padding: 10px;
+            border-radius: 20px;
+            background-color: var(--mid);
+            width: 44px;
+            height: 44px;
+            margin-right: 10px;
+
+            &.active {
+                box-shadow: 0 0 3px 0 rgba(0, 178, 72, 1);
+            }
+
+            &.inactive {
+                box-shadow: 0 0 3px 0 rgba(251, 102, 122, 1);
+            }
+
+            &:hover {
+                background-color: var(--dark);
+            }
+
+            &:active i {
+                animation: rotation 1s infinite linear;
+            }
+        }
+
+        input {
+            height: 44px;
+        }
+    }
+
+    .players {
+        grid-area: status;
+        border-spacing: 0;
+        border-collapse: collapse;
+        border: 0;
+        text-align: left;
+        // overflow: hidden;
+        // width: 50%;
+        width: 100%;
+        // margin: 0 auto 60px auto;
+        display: table;
+        // padding: 0 0 8em 0;
+
+        td, th {
+            border: 0;
+            padding: 0;
+            padding-bottom: 10px;
+            padding-top: 10px;
+            padding-left: 2%;
+
+            &:nth-child(1),
+            &:nth-child(2) {
+                width: 50px;
+                padding-left: 0;
+            }
+        }
+
+        th {
+            background-color: #fff;
+
+            &:nth-child(1) > h1,
+            &:nth-child(2) > h1 {
+                text-align: center;
+            }
+
+            h1 {
+                font-weight: bold;
+                font-size: 1em;
+                text-align: left;
+                color: black;
+            }
+        }
+
+        td {
+            font-weight: normal;
+            font-size: 1em;
+
+            &:first-child {
+                color: #FB667A;
+            }
+
+            &:hover {
+                background-color: #ffc1e3;
+                color: black;
+                font-weight: bold;
+            }
+            &:nth-child(1),
+            &:nth-child(2) {
+                &:hover {
+                    cursor: pointer;
+                }
+
+                i {
+                    display: block;
+                    margin: auto;
+                    text-align: center;
+                }
+            }
+        }
+
+        tr {
+            height: 50px;
+
+            &:hover {
+                background-color: var(--dark) !important;
+            }
+
+            &:nth-child(odd) {
+                background-color: var(--light);
+            }
+
+            &:nth-child(even) {
+                background-color: var(--mid);
+            }
+        }
+    }
+
+    .console {
+        grid-area: console;
+        display: grid;
+        grid-template-rows: 10px 1fr;
+        position: relative;
+        background-color: black;
+        height: 50px;
+
+        .resize-handle-top {
+            top: 0;
+            height: 10px;
+            background-color: grey;
+            position: absolute;
+            cursor: row-resize;
+            width: 100%;
+        }
+
+        .text {
+            top: 10px;
+            position: absolute;
+            color: white;
+            font-family: monospace;
+            padding: 10px;
+            width: 100%;
+            font-size: 1.2em;
+        }
+
+    }
+}
+
+
+@media (max-width: 800px) {
+    .container {
+        td:nth-child(7),
+        td:nth-child(8),
+        th:nth-child(7),
+        th:nth-child(8) {
+            display: none;
+        }
+    }
+}
+
+@media (max-width: 600px) {
+    .container {
+        td:nth-child(6),
+        th:nth-child(6) {
+            display: none;
+        }
+    }
+}
+
+@keyframes rotation {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(359deg);
+    }
+}

@@ -1,0 +1,69 @@
+<div class="container">
+    <h1 class="title">{{ 'PAGES.HOME.TITLE' | translate }}</h1>
+    <div class="controls">
+        <div class="btn" (click)="refresh()" tooltip="Refresh player info">
+            <i class="material-icons">refresh</i>
+        </div>
+        <div class="btn" (click)="autoRefreshTurnedOn = !autoRefreshTurnedOn"
+            [ngClass]="autoRefreshTurnedOn ? 'active' : 'inactive'" tooltip="Autorefresh every 5 seconds">
+            <i class="material-icons">autorenew</i>
+        </div>
+        <input type="text" placeholder="Filter through all users">
+    </div>
+    <table class="players">
+        <thead>
+            <th>
+                <h1>Kick</h1>
+            </th>
+            <th>
+                <h1>Ban</h1>
+            </th>
+            <th>
+                <h1>Id</h1>
+            </th>
+            <th>
+                <h1>Name</h1>
+            </th>
+            <th>
+                <h1>IP</h1>
+            </th>
+            <th>
+                <h1>PORT</h1>
+            </th>
+            <th>
+                <h1>Score</h1>
+            </th>
+            <th>
+                <h1>Ping</h1>
+            </th>
+            <!-- <th><h1>QPort</h1></th>
+            <th><h1>Rate</h1></th> -->
+        </thead>
+        <tbody>
+            <tr *ngFor="let player of players">
+                <td (click)="kick(player)"><i class="material-icons">clear</i></td>
+                <td (click)="ban(player)"><i class="material-icons">block</i></td>
+                <td [innerText]="player?.id"></td>
+                <td [innerText]="player?.name?.display"></td>
+                <td [innerText]="player?.ip"></td>
+                <td [innerText]="player?.port"></td>
+                <td [innerText]="player?.score"></td>
+                <td [innerText]="player?.ping"></td>
+                <!-- <td [innerText]="player?.qport"></td>
+                <td [innerText]="player?.rate"></td> -->
+            </tr>
+        </tbody>
+    </table>
+    <div class="console"
+        mwlResizable
+        [ngStyle]="style"
+        [enableGhostResize]="true"
+        [validateResize]="validate"
+        [resizeEdges]="{bottom: false, right: false, top: true, left: false}"
+        (resizeEnd)="onResizeEnd($event)">
+        <div class="resize-handle-top" mwlResizeHandle [resizeEdges]="{ top: true }"></div>
+        <div class="text" contenteditable="true">
+
+        </div>
+    </div>
+</div>

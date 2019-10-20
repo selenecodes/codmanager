@@ -38,6 +38,33 @@ th {
     user-select: none;
 }
 
+input[type="submit"] {
+    cursor: pointer;
+    // display: inline-block;
+    padding: 10px;
+    border-radius: 20px;
+    background-color: var(--mid);
+    width: 44px;
+    height: 44px;
+    margin-left: 10px;
+
+    &.active {
+        box-shadow: 0 0 3px 0 rgba(0, 178, 72, 1);
+    }
+
+    &.inactive {
+        box-shadow: 0 0 3px 0 rgba(251, 102, 122, 1);
+    }
+
+    &:hover {
+        background-color: var(--dark);
+    }
+
+    &:active i {
+        animation: rotation 1s infinite linear;
+    }
+}
+
 input[type="text"],
 input[type="number"],
 input[type="email"],

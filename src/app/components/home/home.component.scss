@@ -2,8 +2,9 @@
     height: 100%;
     padding: 60px;
     display: grid;
-    grid-template-areas: "title" "controls" "status" "console";
+    grid-template-areas: "title" "controls" "status";
     grid-template-rows: max-content 60px 1fr;
+    // grid-template-areas: "title" "controls" "status" "console";
 
     .title {
         grid-area: title;
@@ -18,6 +19,11 @@
         display: flex;
 
         .btn {
+            &[type="submit"] {
+                margin-left: 10px;
+                border: 0;
+            }
+
             cursor: pointer;
             // display: inline-block;
             padding: 10px;

@@ -1,5 +1,6 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, ChangeDetectorRef } from '@angular/core';
 import { RconService } from '../../services/rcon.service';
+import { BackendService } from '../../services/backend.service';
 import { ResizeEvent } from 'angular-resizable-element';
 
 @Component({
@@ -7,18 +8,25 @@ import { ResizeEvent } from 'angular-resizable-element';
     templateUrl: './home.component.html',
     styleUrls: ['./home.component.scss']
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent  {
     public players = [];
+    public filteredPlayers = [];
     private lastCommandWasStatus = false;
-    private autoRefreshTurnedOn = false;
+    private autoRefreshTurnedOn = true;
     public style: object = {};
+    public apiKey = localStorage.getItem('api_key');
 
-    constructor(private rcon: RconService, private ref: ChangeDetectorRef) {
+    constructor(
+        private rcon: RconService,
+        private ref: ChangeDetectorRef,
+        private backend: BackendService,
+    ) {
         this.refresh();
         this.autoRefresh(5);
         this.rcon.client.socket.socket.addListener('message', (res) => {
             if (this.lastCommandWasStatus) {
                 this.players = rcon.formatData(res);
+                this.filteredPlayers = this.players;
                 this.ref.detectChanges();
             }
         });
@@ -33,11 +41,14 @@ export class HomeComponent implements OnInit {
     }
 
     ban(user: any) {
-        this.lastCommandWasStatus = false;
-        this.rcon.ban(user);
+        if (localStorage.getItem('api_key')) {
+            this.lastCommandWasStatus = false;
+            this.backend.ban(user);
+            this.kick(user);
 
-        // !NOTE: The timeout is 2100 because it takes 2 seconds to remove a player from playercount
-        setTimeout(() => this.refresh(), 2100);
+            // !NOTE: The timeout is 2100 because it takes 2 seconds to remove a player from playercount
+            setTimeout(() => this.refresh(), 2100);
+        }
     }
 
     refresh() {
@@ -55,8 +66,24 @@ export class HomeComponent implements OnInit {
         }, seconds * 1000);
     }
 
+    searchUsers(event) {
+        const query = event.target.value.toLowerCase();
+
+        if (this.players) {
+            this.filteredPlayers = this.players.filter(user =>
+                user.name.display.toLowerCase().includes(query) || user.ip.includes(query) || user.id.includes(query)
+            );
+        }
+    }
+
+    setApiKey(event) {
+        localStorage.setItem('api_key', event.key);
+        this.apiKey = event.key;
+    }
+
+    // !NOTE used for resizing the console
     validate(event: ResizeEvent): boolean {
-        const MIN_DIMENSIONS_PX: number = 50;
+        const MIN_DIMENSIONS_PX = 50;
         if (
             event.rectangle.width &&
             event.rectangle.height &&
@@ -67,7 +94,6 @@ export class HomeComponent implements OnInit {
         }
         return true;
     }
-
     onResizeEnd(event: ResizeEvent): void {
         this.style = {
             position: 'fixed',
@@ -77,6 +103,4 @@ export class HomeComponent implements OnInit {
             height: `${event.rectangle.height}px`
         };
     }
-
-    ngOnInit() { }
 }

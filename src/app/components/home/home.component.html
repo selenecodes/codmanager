@@ -1,4 +1,15 @@
-<div class="container">
+<div class="container" *ngIf="!apiKey">
+    <h1 class="title">Please set your API key</h1>
+    <form class="controls" #key="ngForm" (ngSubmit)="setApiKey(key.value)">
+        <input type="text" name="key" placeholder="Type your api key here" ngModel>
+
+        <!-- <input type="submit"> -->
+        <button type="submit" class="btn" tooltip="Change your API key">
+            <i class="material-icons">edit</i>
+        </button>
+    </form>
+</div>
+<div class="container" *ngIf="apiKey">
     <h1 class="title">{{ 'PAGES.HOME.TITLE' | translate }}</h1>
     <div class="controls">
         <div class="btn" (click)="refresh()" tooltip="Refresh player info">
@@ -8,7 +19,10 @@
             [ngClass]="autoRefreshTurnedOn ? 'active' : 'inactive'" tooltip="Autorefresh every 5 seconds">
             <i class="material-icons">autorenew</i>
         </div>
-        <input type="text" placeholder="Filter through all users">
+        <div class="btn" (click)="apiKey = !apiKey" tooltip="Change your API key">
+            <i class="material-icons">edit</i>
+        </div>
+        <input type="text" placeholder="Filter through active users" (keyup)="searchUsers($event)">
     </div>
     <table class="players">
         <thead>
@@ -40,7 +54,7 @@
             <th><h1>Rate</h1></th> -->
         </thead>
         <tbody>
-            <tr *ngFor="let player of players">
+            <tr *ngFor="let player of filteredPlayers">
                 <td (click)="kick(player)"><i class="material-icons">clear</i></td>
                 <td (click)="ban(player)"><i class="material-icons">block</i></td>
                 <td [innerText]="player?.id"></td>
@@ -54,7 +68,7 @@
             </tr>
         </tbody>
     </table>
-    <div class="console"
+    <!-- <div class="console"
         mwlResizable
         [ngStyle]="style"
         [enableGhostResize]="true"
@@ -65,5 +79,5 @@
         <div class="text" contenteditable="true">
 
         </div>
-    </div>
+    </div> -->
 </div>
